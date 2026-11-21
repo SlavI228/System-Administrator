@@ -1,0 +1,319 @@
+Project 1 — SysAdmin Lab Foundations
+
+Project Overview
+
+The purpose of this project was to build a basic systems administration laboratory from scratch. The lab provides a safe environment for learning Windows and Linux administration, networking, users and permissions, system management, troubleshooting, and documentation.
+
+This project establishes the foundation required for the remaining SysAdmin projects.
+
+Project Goals
+
+The primary goals were:
+
+Build a virtualized laboratory environment. Install and configure operating systems. Configure basic networking. Create and manage users. Configure file permissions. Install and manage software. Manage system services. Practice Windows and Linux administration. Perform basic troubleshooting. Document the environment.
+
+Lab Environment
+
+Host Computer
+
+· Ubuntu Linux
+
+Component
+
+· 8 RAM
+
+Specification
+
+· 8 GB
+
+Operating System
+
+· Ubuntu
+
+Virtualization
+
+· Virtual machines
+
+Lab Type
+
+· Isolated test environment
+
+The lab was designed to minimize resource consumption so that it could operate on a computer with
+
+limited RAM and storage.
+
+Virtual Machines
+
+The following systems were used for the lab:
+
+Hostname
+
+· Win-11
+
+· Ubuntu-Serv
+
+Operating System
+
+· Windows 11
+
+· Ubuntu (Linux)
+
+Purpose
+
+· Windows administration
+
+· Linux administration
+
+The number of simultaneously running virtual machines was kept low to conserve system resources.
+
+Network Design
+
+The lab used a private network.
+
+Network: 192.168.56.0/24 Gateway: 192.168.56.1
+
+Win-11 192.168.56.120
+
+Ubuntu-Serv 192.168.56.118
+
+The private network prevents the laboratory systems from needing publicly routable addresses.
+
+Windows Administration
+
+Windows administration tasks included:
+
+Creating local users. Managing groups. Configuring system settings. Checking network configuration. Managing services. Reviewing Event Viewer. Testing network connectivity. Using PowerShell.
+
+Useful Commands
+
+ipconfig
+
+hostname
+
+whoami
+
+Get-Service
+
+Get-Process
+
+Get-ComputerInfo
+
+Test-NetConnection
+
+These commands provide basic visibility into the Windows system.
+
+Linux Administration
+
+Linux administration tasks included:
+
+Creating users. Managing groups. Managing file permissions. Installing packages. Managing services. Checking disk usage. Checking memory usage. Checking network configuration. Reviewing system logs. Using SSH.
+
+Useful Commands
+
+whoami
+
+hostname
+
+ip addr
+
+ip route
+
+df -h
+
+free -h
+
+ps aux
+
+systemctl status ssh
+
+journalctl
+
+User Management
+
+A basic user-management structure was created.
+
+Example:
+
+Users ├── administrator ├── helpdesk ├── developer └── user01
+
+Users were assigned appropriate permissions based on their intended responsibilities.
+
+The project introduced the principle of least privilege, where users should receive only the access required to perform their jobs.
+
+File Permissions
+
+Linux permissions were tested using:
+
+ls -l
+
+Example:
+
+-rw-r----- user01 employees company.txt
+
+The three primary permission categories were reviewed:
+
+Owner Group Others
+
+And the common permissions:
+
+r = read w = write x = execute
+
+Windows NTFS permissions were also reviewed conceptually.
+
+Software and Package Management
+
+Linux software was managed through the operating system’s package manager.
+
+Typical operations included:
+
+sudo apt update
+
+sudo apt upgrade
+
+sudo apt install ssh
+
+Software installation and updates were performed inside the isolated lab environment.
+
+Service Management
+
+Linux services were inspected and managed using systemctl.
+
+systemctl status ssh
+
+sudo systemctl restart ssh
+
+sudo systemctl enable ssh
+
+The purpose was to understand the relationship between applications, services, processes, and the operating system.
+
+Networking Tests
+
+Basic network troubleshooting was performed.
+
+Check IP configuration
+
+ip addr
+
+Check routing
+
+ip route
+
+Test connectivity
+
+ping <192.168.56.118> ping <192.168.56.120>
+
+Test DNS
+
+nslookup slavovconstruction.com
+
+Test connectivity from Windows
+
+Test-NetConnection <192.168.56.118>
+
+The troubleshooting process followed a layered approach:
+
+Network adapter ↓ IP address ↓ Subnet mask ↓ Default gateway ↓ DNS ↓ Remote service
+
+System Monitoring
+
+Basic system information was collected.
+
+Linux
+
+uptime
+
+free -h
+
+df -h
+
+top
+
+Windows
+
+Get-Process
+
+Get-Service
+
+Get-ComputerInfo
+
+Troubleshooting Exercise
+
+Problem
+
+A Linux system could not communicate with another machine. Troubleshooting Process
+
+First, the network interface was checked:
+
+· ip addr
+
+Connectivity to the gateway was tested:
+
+ping 192.168.56.118
+
+Troubleshooting Model
+
+Is the interface UP? ↓ Does the virtual machine have an IP? ↓ Is the subnet correct? ↓ Is the gateway reachable? ↓ Is the remote host reachable? ↓ Is the required service running?
+
+This process prevents random changes and helps identify the actual cause.
+
+Security Practices
+
+The following security principles were introduced:
+
+Use strong passwords. Avoid unnecessary administrator privileges. Keep operating systems updated. Disable unnecessary services. Use firewalls. Use SSH securely. Separate administrative accounts from normal accounts. Keep backups of important configuration. Avoid exposing laboratory services directly to the Internet.
+
+Problems Encountered
+
+Problem 1 — Limited Hardware Resources
+
+The lab environment was constrained by available RAM and storage.
+
+#Solution
+
+Only the required virtual machines were powered on at the same time, and unnecessary virtual hardware was minimized.
+
+Problem 2 — Network Connectivity
+
+Connectivity problems were investigated by checking:
+
+IP address Gateway Routing DNS Firewall Services
+
+Problem 3 — Permission Errors
+
+Permission problems were investigated by checking the user identity, group membership, ownership, and permissions.
+
+Skills Learned
+
+After completing Project 1, the following skills were developed: Windows
+
+Basic Windows administration PowerShell fundamentals User management Service management Network troubleshooting Event Viewer
+
+Linux
+
+Linux command line User management Groups File permissions Package management Service management Networking Logs
+
+Networking
+
+IPv4 Private addressing Subnets Default gateway DNS Connectivity testing
+
+SysAdmin
+
+Troubleshooting Documentation Basic security System monitoring Virtual machines
+
+Lessons Learned
+
+The most important lesson I learned from Project 1 was that systems administration requires understanding how multiple components interact.
+
+For example:
+
+User ↓ Operating System ↓ Network ↓ DNS ↓ Service ↓ Application
+
+A failure at any layer can appear to the user as simply “the system doesn’t work.”
+
+Systematic troubleshooting is therefore more effective than making random configuration changes.
+
+Portfolio Summary
+
+Environment: Windows + Linux virtual lab Primary Skills: Systems administration, networking, permissions, troubleshooting, documentation
+
+This project demonstrates the ability to create and manage a basic IT laboratory and provides the technical foundation for the remaining SysAdmin projects.
