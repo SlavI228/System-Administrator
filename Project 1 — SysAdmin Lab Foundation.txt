@@ -2,7 +2,8 @@ Project 1 — SysAdmin Lab Foundations
 
 Project Overview
 
-The purpose of this project was to build a basic systems administration laboratory from scratch. The lab provides a safe environment for learning Windows and Linux administration, networking, users and permissions, system management, troubleshooting, and documentation.
+The purpose of this project was to build a basic systems administration laboratory from scratch. The lab provides a safe environment for learning Windows and Linux 
+administration, networking, users and permissions, system management, troubleshooting, and documentation.
 
 This project establishes the foundation required for the remaining SysAdmin projects.
 
