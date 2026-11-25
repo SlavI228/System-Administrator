@@ -1,0 +1,145 @@
+Project 5 Deploy and configure a Linux server from a clean installation.
+
+Manage system services with systemd.
+
+Deploy a web service such as Nginx.
+
+Monitor logs and troubleshoot common service/network failures.
+
+Prepare the server to integrate with later monitoring, backup, and automation
+
+projects.
+
+
+# Target Lab Architecture
+
+
+Primary server: FILE or equivalent Ubuntu Server VM.
+
+Administrative workstation: Windows client or administrator machine.
+
+Optional infrastructure integration: DC01 for DNS/identity services, MON for
+
+monitoring, and BACKUP for backup operations
+
+
+Recommended logical flow:
+
+
+Administrator Linux Server Monitoring Backup Administrators: administrative access through sudo.
+
+Shared data: controlled by owner, group, and filesystem permissions.
+
+Correct IP configuration
+
+Working DNS resolution
+
+Only the required listening services
+
+
+# Useful commands:
+
+
+ip addr
+
+ip route
+
+ss -tulpn
+
+ping
+
+getent hosts
+
+curl
+
+resolvectl status
+
+
+Troubleshooting should separate DNS, routing, firewall, and application/service
+
+failures.
+
+
+# Nginx / Web Service
+
+
+Deploy Nginx as the initial application service. Verify that the service starts
+
+automatically and responds locally and remotely.
+
+
+Validation:
+
+
+systemctl status nginx
+
+curl http://127.0.0.1
+
+ss -tulpn
+
+
+# Security Baseline
+
+
+Apply a basic Linux security baseline:
+
+
+Use individual accounts and sudo.
+
+Avoid direct root SSH administration.
+
+Allow only required ports.
+
+Protect credentials and private keys.
+
+Server boots successfully.
+
+SSH administration works using the intended account.
+
+Nginx is running and reachable on its intended port.
+
+Logs contain expected service/authentication events.
+
+Required services restart correctly after reboot.
+
+SSH unavailable:
+
+
+Check IP port 22 listening ssh service Website unavailable:
+
+
+Check Nginx service local curl client connectivity
+
+DNS failure:
+
+
+Check resolvectl status name resolution Disk full:
+
+
+Check df -h review logs verify service health.
+
+
+# Evidence to Capture
+
+
+Recommended evidence:
+
+
+ip addr / ip route
+
+User/group configuration
+
+systemctl status nginx
+
+Firewall rules
+
+journalctl output
+
+Successful reboot test
+
+
+# Lessons Learned
+
+The main operational lesson of Project 5 is that a Linux server should be treated as a managed system rather than a collection of commands.
+
+Configuration, security, services, logs, and troubleshooting all interact. The project also establishes the Linux foundation required for monitoring, backup and recovery, automation, network security, and the final enterprise capstone.

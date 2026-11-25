@@ -1,0 +1,154 @@
+Project 10 
+
+Into single enterprise-style infrastructure. The target environment provides centralized identity, network services, file services, Linux application hosting, monitoring, logging, backup, security controls, automation, and disaster recovery.
+
+The design emphasizes least privilege, network segmentation, repeatable configuration, observability, recoverability, and operational documentation.
+
+The environment is intended as a professional training and portfolio project rather than a production deployment.
+
+# Business Requirements:
+
+Provide centralized Windows identity and access management.
+
+Provide department-based file shares with controlled permissions.
+
+Separate clients, servers, management, and backup traffic.
+
+Centralize important logs and support incident investigation.
+
+Automate repeatable server configuration with Ansible, PowerShell, and Bash.
+
+FW01 Organizational units/departments: IT, Cooking, Finance, VideoGames
+
+Normal users should not receive Domain Admin privileges.
+
+Administrative accounts should be separated from normal user accounts.
+
+192.168.20.200, with the correct gateway, DNS server, and domain settings.
+
+Firewall routing and NAT should provide controlled Internet access while preventing unnecessary client-to-management and client-to-backup access.
+
+# File Services:
+
+FILE01 should expose a departmental share structure:
+
+\\FILE01\Departments\Cooking
+
+\\FILE01\Departments\VideoGames
+
+Permissions should follow least privilege: users receive only the access required for their department and role.
+
+# Application Infrastructure:
+
+APP01 hosts an internal Nginx-based application page. The service should be reachable from authorized client networks, monitored from MON01, and included in backup/configuration management.
+
+# Monitoring & Logging:
+
+Track CPU, memory, disk, network, uptime, service state, and availability.
+
+Centralize important Linux and Windows events for troubleshooting and incident investigation.
+
+Ansible controls repeatable Linux configuration.
+
+Bash handles Linux health checks, backups, and maintenance.
+
+Ansible roles should cover common configuration, Nginx, monitoring, and backup functions.
+
+Passwords, API keys, and private keys must never be committed in plaintext.
+
+# Security Architecture:
+
+Separate client, server, management, and backup networks.
+
+Use SSH keys and individual Linux accounts; avoid routine direct root SSH access.
+
+Use group-based authorization for file access.
+
+Centralize logs and review authentication and service failures.
+
+# Incident Response Runbook
+
+1. Detect and record the incident.
+
+2. Identify affected users, systems, and services.
+
+3. Check monitoring status.
+
+4. Validate DNS and network connectivity.
+
+5. Check the target service and listening ports.
+
+6. Review relevant system/application/security logs.
+
+7. Identify root cause.
+
+8. Apply the smallest safe remediation.
+
+9. Validate service recovery from the user perspective.
+
+10. Document timeline, impact, cause, resolution, and preventive actions.
+
+# Final Validation Plan:
+
+Area Validation Result
+
+Network VLANs, gateways, routing, NAT, firewall rules Pass
+
+DNS Internal names resolve correctly Pass
+
+DHCP Clients receive correct network configuration Pass
+
+AD Users authenticate and group membership is correct Pass
+
+File services Department permissions work as intended Pass
+
+Application APP01 responds and is reachable from authorized clients Pass
+
+Monitoring Servers and services appear healthy Pass
+
+Logging Important events are searchable Pass
+
+Backup Backup completes and is verifiably restorable Pass
+
+Automation Fresh Linux server can be configured repeatably Pass
+
+Security Unnecessary client/admin paths are blocked Pass
+
+DR A documented recovery test meets target RTO/RPO Pass
+
+# Final Capstone Incident Scenarios:
+
+INC-001 APP01 Failure
+
+The application is unavailable. Use monitoring, network tests, service status, logs, automation, and backup/rebuild procedures.
+
+INC-003 Client Network Failure
+
+A client has an address but cannot reach required services. Isolate DHCP, DNS, gateway, routing, firewall, and service layers.
+
+
+# Portfolio Deliverables:
+
+IP/VLAN plan
+
+Active Directory design
+
+File server permissions model
+
+Backup policy and restore evidence
+
+PowerShell/Bash toolkit
+
+Disaster recovery runbook
+
+Final validation results
+
+# Professional Assessment:
+
+A successful completion demonstrates the ability to think across the full infrastructure lifecycle: design secure monitor troubleshoot document. The strongest evidence is not simply that each component exists, but that the environment can be reproduced,
+tested, intentionally broken in a safe lab, diagnosed from evidence, and recovered.
+
+# Completion Sign-Off:
+
+Administrator: Ivan
+Result: - Pass

@@ -1,0 +1,315 @@
+Project 2 — Users, Groups & Permissions
+
+Project Overview
+
+Project: Users, Groups & Permissions Level: Beginner → Intermediate Role: Systems Administrator Environment: Ubuntu Host / Windows 11 Lab / Linux virtual lab
+
+The purpose of this project was to learn how a Systems Administrator manages user accounts, groups, permissions, and access control in a small enterprise environment.
+
+The project focused on the principle of least privilege, where users receive only the access required to perform their job responsibilities.
+
+Objectives
+
+The main objectives were:
+
+Create and manage Linux users. Create and manage Windows users. Create security groups. Assign users to groups. Configure file and directory permissions. Understand Linux ownership and permissions. Understand Windows NTFS permissions. Test access between different users. Remove or modify user access. Practice basic administrative troubleshooting. Document the configuration and results.
+
+Lab Environment
+
+The project was performed in an isolated virtual lab.
+
+Systems
+
+Host Operating System Purpose
+
+Ubuntu-Serv Ubuntu Server Linux administration
+
+Win-11 Windows 11 Windows administration
+
+The environment was isolated from production systems.
+
+Network Configuration
+
+Lab network:
+
+Network: 192.168.56.0/24
+
+Addressing:
+
+Ubuntu-Serv 192.168.56.118 Win-11 192.168.56.120
+
+Linux User Management
+
+Linux users were created using standard system administration commands.
+
+Commands:
+
+sudo adduser ivan
+
+Another user:
+
+sudo adduser mykola
+
+Users were verified with:
+
+getent passwd ivan getent passwd mykola
+
+The /etc/passwd database was reviewed to understand how local Linux accounts are represented.
+
+Linux Groups
+
+Groups were created to simplify permission management.
+
+Commands:
+
+sudo groupadd IT sudo groupadd finance sudo groupadd videogames
+
+Users were assigned to groups:
+
+sudo usermod -aG it ivan sudo usermod -aG finance mykola
+
+Membership was verified:
+
+groups ivan groups mykola
+
+This demonstrated why groups are preferable to assigning permissions individually to every user.
+
+Linux Directory Structure
+
+Department directories were created:
+
+sudo mkdir -p /srv/family/IT sudo mkdir -p /srv/family/Finance sudo mkdir -p /srv/family/cooking
+
+Ownership and permissions were then assigned according to department requirements.
+
+sudo chown root:finance /srv/family/Finance sudo chmod 770 /srv/family/Finance
+
+Linux Permissions
+
+Linux permissions were examined using:
+
+ls -l
+
+drwxrwx--- root finance Finance
+
+Linux permissions were studied using the three primary permission categories:
+
+Owner Group Others
+
+And the three primary permissions:
+
+r = read w = write x = execute
+
+Example:
+
+770
+
+means:
+
+Owner → rwx Group → rwx Others → ---
+
+Least Privilege
+
+The project implemented the principle of least privilege.
+
+For example:
+
+Finance users ↓ Finance directory ↓ Allowed
+
+Finance users ↓ VideoGames directory ↓ Denied
+
+This prevents unnecessary access to information belonging to other departments.
+
+Windows User Management
+
+Windows local accounts were managed through PowerShell.
+
+Commads:
+
+New-LocalUser -Name "Ivan"
+
+Users were listed with:
+
+Get-LocalUser
+
+A local security group was created:
+
+New-LocalGroup -Name "IT-Users"
+
+A user was added to the group:
+
+Add-LocalGroupMember -Group "IT-Admin" -Member "Ivan"
+
+Membership was verified with:
+
+Get-LocalGroupMember -Group "IT-Admin"
+
+Windows File Permissions
+
+Test directories were created on Win-11.
+
+C:\CompanyData ├── IT ├── VideoGames └── Finance
+
+NTFS permissions were configured so that users received access based on their department.
+
+The objective was to demonstrate:
+
+User ↓ Security Group ↓ NTFS Permission ↓ Resource
+
+Access Testing
+
+Permissions were tested using different accounts.
+
+Test 1 — Authorized Access
+
+Ivan ↓ IT group ↓ IT directory ↓ ACCESS GRANTED
+
+Test 2 — Unauthorized Access
+
+Ivan ↓ IT group ↓ Finance directory ↓ ACCESS DENIED
+
+This verified that permissions were working as designed.
+
+Linux Permission Troubleshooting
+
+When access failed, the following commands were used:
+
+ls -l
+
+id ivan
+
+groups ivan
+
+namei -l /srv/company/Finance
+
+These commands helped determine:
+
+File ownership Group membership Directory permissions Permission inheritance through the directory path
+
+Windows Permission Troubleshooting
+
+Windows permissions were investigated using PowerShell and Windows security tools.
+
+Commands:
+
+whoami
+
+whoami /groups
+
+Get-LocalGroupMember -Group "IT-Users"
+
+The Windows Security properties of the test directories were also reviewed.
+
+User Lifecycle Management
+
+The project also demonstrated the basic user lifecycle.
+
+Created family ↓ Create account ↓ Assign department ↓ Assign permissions ↓ User performs work ↓ Member leaves ↓ Disable/remove access
+
+Linux account removal:
+
+sudo userdel -r ivan
+
+For Windows:
+
+Remove-LocalUser -Name "Ivan"
+
+Only test accounts should be removed with these commands.
+
+Security Considerations
+
+The following security principles were applied: Least Privilege
+
+Users should receive only the permissions they require. Group-Based Access
+
+Permissions should generally be assigned to groups rather than individually to every user.
+
+Administrative Separation
+
+Normal accounts should not automatically have administrative privileges. Strong Authentication
+
+Administrative accounts should use strong authentication credentials. Account Lifecycle
+
+Inactive accounts should be disabled or removed according to organizational policy.
+
+Auditing
+
+Important account and permission changes should be logged in a real environment.
+
+Testing Results
+
+Test Expected Result Result
+
+Create Linux user Account created PASS
+
+Create Linux group Group created PASS
+
+Add user to group Membership updated PASS
+
+Create protected directory Directory created PASS
+
+Authorized user access Access granted PASS
+
+Unauthorized user access Access denied PASS
+
+Create Windows user Account created PASS
+
+Create Windows group Group created PASS
+
+Add Windows user to group Membership updated PASS
+
+Verify permissions Correct permissions PASS
+
+Problems Encountered
+
+During the project, common administrative issues included: Problem
+
+User could not access a directory. Investigation
+
+id username
+
+and:
+
+ls -ld /path/to/directory
+
+were used to investigate group membership and permissions.
+
+Resolution
+
+The user’s group membership or directory permissions were corrected.
+
+Lessons Learned
+
+This project demonstrated that effective user administration is not simply about creating accounts.
+
+A Systems Administrator must understand:
+
+Identity ↓ Groups ↓ Permissions ↓ Resources ↓ Access Control
+
+The most important lesson was that group-based access control and least privilege make environments easier to manage and more secure.
+
+Skills Demonstrated
+
+The following skills were demonstrated:
+
+Linux user administration Linux group administration Linux permissions chmod chown usermod userdel Windows user administration PowerShell
+
+Windows security groups NTFS permissions Access-control troubleshooting Least privilege Basic security administration User lifecycle management Technical documentation
+
+Final Assessment
+
+Project Status: Completed
+
+The project successfully demonstrated the fundamental principles of user and access management in Linux and Windows environments.
+
+Conclusion
+
+Project 2 established the foundation for secure account and resource management.
+
+The environment now supports:
+
+Users ↓ Groups ↓ Permissions ↓ Resources
+
+This provides the foundation required for enterprise technologies such as Active Directory, centralized authentication, file servers, Group Policy, monitoring, automation, and security management.
+
+The next stage is to build a centralized file server, where these users and groups will be used to control access to shared company resources.

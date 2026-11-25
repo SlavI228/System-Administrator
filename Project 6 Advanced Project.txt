@@ -1,0 +1,40 @@
+Project 6 Advanced
+
+Focus: Monitoring, metrics, centralized logs, dashboards, alerting, troubleshooting and incident response.
+
+Lab constraint: Lightweight design for an 8 GB RAM workstation; run only the VMs needed for each exercise.
+
+
+# Executive Summary
+
+Project 6 introduces centralized infrastructure observability to the AcmeLab
+
+environment. MON01 acts as the monitoring server and collects system metrics from Linux and Windows systems, presents dashboards through Grafana, and centralizes logs through Loki. The project also establishes basic alerting and incident-response exercises so an administrator can detect, investigate and recover from failures.
+
+
+# Objectives:
+
+Collect Linux metrics with Prometheus and Node Exporter.
+
+Build Grafana dashboards for CPU, memory, disk, network, uptime and availability.
+
+Create alerts for resource exhaustion, server failure and important service failures.
+
+Confirm the affected host and service in Grafana/Prometheus.
+
+Inspect relevant local logs with journalctl or Event Viewer.
+
+Identify the timeline and probable root cause.
+
+Verify recovery from both the service and monitoring perspectives.
+
+Connectivity logs Restrict access to Grafana, Prometheus and Loki to administrators or trusted management networks.
+
+Collect only logs needed for operational/security purposes and protect accessto them.
+
+Monitor authentication failures and important administrative events.
+
+
+# Expected Outcome:
+
+At completion, AcmeLab should have a lightweight centralized monitoring and logging capability in which the administrator can see infrastructure health, investigate failures using metrics and logs, receive alerts for important conditions, and produce a documented incident response. This forms the observability foundation used by the later backup, automation, networking and enterprise capstone projects.

@@ -1,0 +1,111 @@
+Project 3 — File Server & SMB
+
+Environment: AcmeLab Training Infrastructure
+
+Platform: Linux / Samba + Windows Client
+
+Executive Summary
+
+Project 3 establishes a centralized file-server environment for the lab. The project demonstrates how a Linux server can provide shared storage to Windows clients through SMB/Samba while maintaining controlled access through users, groups, permissions, and network connectivity.
+
+The intended outcome is a reusable departmental file-service foundation that can later be integrated with Active Directory, monitoring, backups, automation, and enterprise network segmentation in Projects 4–10.
+
+Objectives
+
+• Deploy a Linux-based file server. • Install and configure Samba/SMB file sharing. • Create a structured shared-data hierarchy. • Create users and groups for controlled access. • Apply Linux filesystem permissions and Samba share permissions. • Connect a Windows client to the SMB share. • Test read/write access and unauthorized access. • Document the environment for future administration.
+
+Target Architecture
+
+The reference architecture for Project 3 uses FILE as the centralized file server and Win-11 as the Windows test workstation.
+
+System Role Address
+
+Ubuntu-Serv Linux file server / Samba 192.168.56.118
+
+Win-11 Windows SMB client 192.168.56.120
+
+DC01
+
+File Share Design
+
+Recommended logical structure: • \FILE\Departments • Departments\IT • Departments\VIdeoGames • Departments\Finance • Departments\Cooking
+
+User and Permission Model
+
+Access should be assigned through groups rather than granting permissions individually to every user. This reduces administrative overhead and supports the least-privilege model.
+
+Group Resource Typical Access Purpose
+
+IT-Users IT share Modify IT staff collaboration
+
+VideoGames-Users VideoGames share Modify VideoGames documents
+
+Finance-Users Finance share Modify Finance documents
+
+Cooking-Users Sales share Modify Cooking documents
+
+Implementation Summary
+
+Phase Implementation
+
+Server preparation Install Ubuntu Server, assign hostname FILE01, update packages, and verify network connectivity.
+
+Storage Create and verify the filesystem location used for departmental data.
+
+Samba Install Samba and configure the SMB service and share definition.
+
+Identity Create local users/groups for the lab and map access to departmental resources.
+
+Permissions Apply owner/group/mode permissions and Samba access controls.
+
+Windows access Connect Win-11 to the SMB share using a UNC path.
+
+Validation Test read/write access, denied access, service status, and network connectivity.
+
+Core Linux Commands
+
+Task Command
+
+Check network ip addr / ip route
+
+Check Samba service systemctl status smbd
+
+Check listening ports sudo ss -tulpn
+
+Check shares testparm
+
+View logs journalctl -u smbd
+
+Inspect permissions ls -la /path/to/share
+
+Check disk space df -h
+
+Validation & Testing
+
+• FILE responds to network connectivity tests. • Samba service is enabled and running. • The SMB share is visible from Win-11. • Authorized users can read and write to their departmental share. • Users
+
+outside a department cannot modify restricted data. • Filesystem ownership and permissions match the intended access model. • Samba configuration passes validation with testparm. • Logs can be reviewed when access or service problems occur.
+
+Troubleshooting Procedure
+
+When a user cannot access a share, troubleshoot from the bottom of the stack upward:
+
+• Confirm Win-11 has a valid IP address and default gateway. • Confirm DNS/name resolution for FILE01 when using hostnames. • Test SMB connectivity to TCP/445. • Check that smbd is running on FILE01. • Validate the Samba configuration with testparm. • Inspect Linux filesystem permissions. • Inspect Samba share-level permissions. • Review Samba/system logs for authentication or access errors.
+
+Security Considerations
+
+• Use individual accounts and groups; avoid shared credentials. • Apply least privilege to departmental folders. • Do not expose SMB directly to the public Internet. • Restrict SMB access to trusted lab networks. • Use strong authentication and protect credentials. • Keep the server patched. • Monitor authentication and service logs. • Back up important file data and periodically test restoration.
+
+Project Completion Checklist
+
+• FILE01 created and configured • Static or reserved IP documented • Samba installed • SMB share created • Department directories created • Users/groups created • Permissions configured • Windows client connected • Read/write tests completed • Unauthorized access test completed • Samba configuration validated • Logs reviewed • Backup requirement documented • Monitoring requirement documented
+
+Expected Deliverables
+
+• Project 3 technical report • Network/file-server diagram • FILE01 configuration notes • Samba configuration documentation • Permission matrix • Windows client test evidence • Screenshots of successful and failed access tests • Troubleshooting notes
+
+Conclusion
+
+Project 3 establishes the core file-service capability of the Lab environment. The most important operational lesson is that file sharing is not simply a matter of creating a network folder: reliable administration requires identity, permissions, service configuration, network access, monitoring, backups, and repeatable documentation.
+
+The resulting Win-Serv (File) service becomes a dependency for later projects, especially Active Directory integration, monitoring, backup/recovery, automation, and enterprise network segmentation.

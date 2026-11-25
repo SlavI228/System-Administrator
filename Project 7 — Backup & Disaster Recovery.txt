@@ -1,0 +1,185 @@
+Project 7 — Backup & Disaster Recovery
+
+Status: Advanced Lab Project Environment: AcmeLab virtual infrastructure
+
+Executive Summary
+
+Project 7 establishes a backup and disaster-recovery capability for the AcmeLab lab environment. The design introduces a dedicated BACKUP01 server, structured backup storage, automated Linux file backups, restore verification, retention planning, RPO/RTO definitions, and disaster-recovery runbooks. The project emphasizes a critical operational principle: a backup is not proven until it has been successfully restored and verified.
+
+Objectives
+
+• Design a practical 3-2-1-style backup strategy. • Define recovery point objectives (RPO) and recovery time objectives (RTO). • Deploy BACKUP01 as a dedicated backup repository. • Back up FILE01 data using rsync and dated backup generations. • Automate and log backup execution. • Test restoration of deleted files and directories. • Validate restored data using checksums. • Simulate server loss and document recovery procedures. • Protect backups through access control, separation, and offline/secondary copies.
+
+Target Architecture
+
+The target design separates production systems from backup storage and provides a secondary or offline copy. In the lab, the architecture is:
+
+FILE01 / DC01 / APP01 ↓ BACKUP01 ↓ Secondary / Offline Copy
+
+System Role Address Priority
+
+DC01 Active Directory / DNS 192.168.56.104 Critical
+
+FILE01 File services 192.168.56.120 Critical
+
+APP01 Application/Web server 192.168.56.120 High
+
+MON01 Monitoring / logging 192.168.56.120 Medium
+
+BACKUP01 Backup repository 192.168.56.120 Critical
+
+Backup Strategy
+
+The recommended lab strategy follows the 3-2-1 principle: maintain at least three copies of important data, use two different storage locations or media, and keep one copy separated from the normal production environment. A simple rsync mirror is not sufficient by itself because deletion or corruption at the source can propagate to a mirror.
+
+Copy Location Purpose
+
+Primary FILE01 Active production data
+
+Backup BACKUP01 Operational recovery
+
+Secondary External separate repository Protection against backup-server or ransomware-style failure
+
+RPO / RTO
+
+RPO defines the maximum acceptable amount of data loss. RTO defines the target time to restore service. The following are project targets for the lab and should be adjusted for a real organization.
+
+System Priority Target RPO Target RTO
+
+DC01 Critical 24 hours 2 hours
+
+FILE01 Critical 24 hours 4 hours
+
+APP01 High 24 hours 4 hours
+
+MON01 Medium 24 hours 8 hours
+
+CLIENT01 Low 7 days 24 hours
+
+Backup Implementation
+
+BACKUP01 is configured as a dedicated Ubuntu Server backup repository. A dedicated storage volume for /backup is preferred.
+
+Backup structure:
+
+/backup/ ├── 2026-09-04/ ├── 2026-09-05/ ├── 2026-09-06/ └── latest/
+
+FILE01 company data is collected into dated backup generations. Dated generations reduce the risk that a single accidental deletion immediately destroys the only recoverable copy.
+
+Automation & Logging
+
+The backup process should be executed by a controlled script and scheduled through cron or an equivalent scheduler. The script must return a failure exit code when rsync fails and should write execution results to a dedicated log.
+
+Recommended flow:
+
+Connectivity check → destination creation → backup → exit-status check → verification → logging → retention.
+
+Restore Testing
+
+A controlled restore test should delete a harmless test file from FILE01, restore it from a dated backup, and verify both its presence and content. SHA-256 checksums can be used to demonstrate that the restored content matches the backup copy.
+
+Test Result
+
+Delete test file File absent from FILE01
+
+Restore from dated backup File returns successfully
+
+Compare checksum Hash matches backup
+
+Open/read file Content is usable
+
+Document result Restore test recorded
+
+Disaster Recovery Scenario
+
+Scenario: FILE01 becomes unavailable because of a simulated disk or server failure. The recovery process should provision a replacement Linux server, reinstall required services, restore the most recent valid backup, verify permissions and service operation, reconnect monitoring, and document the incident.
+
+Recovery sequence:
+
+1. Identify the incident.
+
+2. Determine scope and protect remaining systems.
+
+3. Identify the latest valid backup.
+
+4. Verify backup integrity.
+
+5. Prepare replacement server.
+
+6. Restore data and configuration.
+
+7. Restore services and permissions.
+
+8. Validate application/file access.
+
+9. Re-enable monitoring and backups.
+
+10. Record actual RPO/RTO and complete the post-incident review.
+
+Security Controls
+
+• Restrict access to backup storage using least privilege. • Use individual administrative accounts rather than routine root access. • Use SSH keys for automated Linux administration where appropriate. • Protect backup credentials and never commit secrets to Git. • Encrypt backup data when required by
+
+the environment or data sensitivity. • Maintain a secondary/offline copy that is not continuously exposed to production credentials. • Monitor backup failures and review backup logs.
+
+Retention Policy
+
+Backup Type Suggested Lab Retention
+
+Daily 7 days
+
+Weekly 4 weeks
+
+Monthly 3 months
+
+Retention should be reviewed against available storage, business requirements, legal requirements, and the organization's recovery objectives.
+
+Risks & Mitigations
+
+Risk Impact Mitigation
+
+Backup server failure Loss of recovery capability Secondary/offline copy
+
+Corrupt backup Restore failure Checksums and restore tests
+
+Accidental deletion Data loss Dated backup generations
+
+Credential compromise Backup tampering Least privilege and protected credentials
+
+Storage exhaustion Backup failure Retention and disk-space checks
+
+Silent backup failure False confidence Exit-code checks, logs, monitoring
+
+Validation Checklist
+
+· BACKUP01 created and reachable
+
+· Dedicated backup storage configured
+
+· FILE01 data successfully backed up
+
+· Multiple backup generations created
+
+· Backup job automated
+
+· Backup logs generated
+
+· Retention policy documented
+
+· Secondary/offline copy planned or implemented
+
+· Deleted file restored
+
+· Checksum verification performed
+
+· FILE01 recovery procedure documented
+
+· RPO and RTO defined
+
+· Recovery timing measured
+
+· Backup security documented
+
+Final Assessment
+
+Project 7 moves the AcmeLab environment from simple server administration toward resilient infrastructure operations. The strongest outcome is not the presence of a backup directory; it is the ability to demonstrate a repeatable, documented, and tested recovery process.

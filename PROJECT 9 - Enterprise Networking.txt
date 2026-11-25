@@ -1,0 +1,139 @@
+PROJECT 9 - Enterprise Networking & Security
+
+AcmeLab SysAdmin Lab Level: Advanced to Professional Role: Systems / Network Administrator
+
+Executive Summary
+
+Project 9 develops an enterprise-style network and security environment that integrates the infrastructure created in Projects 1-8. The project focuses on segmentation, routing, firewall policy, DNS/DHCP, secure administration, monitoring, packet analysis, and systematic troubleshooting.
+
+Target outcome: a network where required business traffic is allowed, unnecessary access is denied, administrative interfaces are protected, and failures can be isolated to DNS, routing, firewall, or service layers.
+
+Network Architecture
+
+The target design separates servers, clients, and management traffic. A firewall/router provides controlled inter-VLAN routing and Internet NAT.
+
+Logical topology
+
+INTERNET
+
+|
+
+FW01 - Firewall / Router
+
+|
+
++-- VLAN 10 - SERVERS: DC01, FILE01, APP01, MON01
+
++-- VLAN 20 - CLIENTS: CLIENT01, CLIENT02
+
++-- VLAN 30 - MANAGEMENT: ADMIN systems and management access
+
++-- VLAN 40 - BACKUP: BACKUP01 (recommended extension)
+
+The architecture follows the principle that clients, servers, management systems, and backup infrastructure should not be treated as one unrestricted trust zone.
+
+VLAN Design
+
+VLAN 10 contains infrastructure servers. VLAN 20 contains user endpoints. VLAN 30 is reserved for administrative access. VLAN 40 can isolate backup traffic and storage. Access ports should place endpoints in one VLAN; trunks should carry multiple tagged VLANs between network devices that support them.
+
+Routing and NAT
+
+FW01 acts as the controlled routing point between security zones and provides NAT for private networks reaching the Internet. Inter-VLAN routing is not treated as an implicit permission to communicate; firewall policy determines which flows are permitted.
+
+Source Destination Example service Policy
+
+Clients Backup Backup administration Deny
+
+Servers MON01 Monitoring Allow
+
+Servers BACKUP01 Backup traffic Allow
+
+Firewall policy should be adapted to the actual services in the lab. Avoid broad any-to-any rules and document every required exception.
+
+DNS and DHCP
+
+Internal DNS should resolve infrastructure names such as dc01, file01, app01, and mon01. DHCP should provide client addresses, the correct gateway, internal DNS, and the lab domain where appropriate.
+
+Validation examples:
+
+Windows: ipconfig /all
+
+Windows: Resolve-DnsName file01
+
+Windows: Test-NetConnection file01 -Port 445
+
+Linux: ip addr
+
+Linux: ip route
+
+Linux: getent hosts dc01
+
+Secure Administration
+
+Administrative access should originate from the management network. Linux systems should use individual accounts, sudo, SSH keys, restricted root access, and logging. Windows administration should use controlled RDP/PowerShell remoting paths rather than exposing management services directly to the Internet.
+
+Monitoring and Logging Integration
+
+MON01 from Project 6 provides infrastructure visibility. Targets should include DC01, FILE01, APP01, BACKUP01, and relevant client systems. Monitor CPU, memory, disk, network, availability, services, and important authentication/application events.
+
+Packet Analysis
+
+Wireshark can be used in the isolated lab to inspect ARP, DNS, ICMP, TCP, HTTP, and DHCP. Packet analysis is especially useful when basic connectivity tests do not reveal whether the problem is name resolution, routing, filtering, or the application itself.
+
+Troubleshooting Methodology
+
+Use a layered approach: (1) endpoint configuration, (2) VLAN/link, (3) gateway, (4) routing, (5) DNS, (6) firewall, (7) listening port, (8) application/ service, (9) authentication/authorization. This prevents guessing and reduces time to root cause.
+
+Scenario Tests Likely fault domains
+
+Client has IP but no Internet ping gateway; Test-NetConnection 1.1.1.1 -Port 443; route print Gateway, routing, NAT, firewall IP works but hostname fails Resolve-DnsName; nslookup DNS configuration/server DNS works but SMB fails Test-NetConnection file01 -Port 445; ss -tulpn; service status Firewall, port, Samba/service. User authenticates but cannot open share Identity/group/ACL/ share permissions Authorization, Monitoring says APP01 is down Ping; exporter port; service status; firewall Monitoring path, exporter, service
+
+Security Assessment
+
+Strengths: segmented network zones, dedicated management network, least- privilege firewall concept, centralized monitoring, controlled administrative access, and documented troubleshooting paths.
+
+Risks to control: overly permissive firewall rules, direct Internet exposure of RDP/SSH, shared administrator accounts, unmanaged credentials, flat backup access, and incomplete logging.
+
+Recommended controls: deny-by-default where practical, MFA for administrative access where supported, regular firewall-rule review, centralized authentication, restricted management paths, secure backup isolation, and periodic restore/security testing.
+
+Incident Exercise
+
+Ticket: INC-001 - Users report that FILE01 is unavailable.
+
+Investigation sequence:
+
+1. Check MON01 availability and alerts.
+
+2. Verify FILE01 DNS resolution.
+
+3. Test gateway and route from CLIENT01.
+
+4. Test TCP/445 from CLIENT01.
+
+5. Check FILE01 network configuration and listening sockets.
+
+6. Check Samba service status and logs.
+
+7. Inspect firewall policy.
+
+8. Restore service and validate from a client.
+
+9. Document root cause and preventive action.
+
+10. Final Acceptance Tests
+
+Result
+
+Windows-Client receives DHCP configuration Correct IP, gateway, DNS, domain Windows-Client resolves internal names Internal hosts resolve correctly Windows-Client reaches permitted SMB service TCP/445 succeeds Windows-Client cannot reach management interfaces Connection denied
+
+ADMIN can manage Linux SSH succeeds from management zone ADMIN can manage Windows RDP/PowerShell succeeds as configured
+
+Servers reach monitoring MON01 receives metrics Servers reach backup service Required backup traffic succeeds Firewall blocks unauthorized traffic Connection fails and event is logged where supported Incident simulation can be diagnosed Root cause isolated using layered tests
+
+Deliverables
+
+Network diagram; IP address plan; VLAN documentation; routing and NAT design; firewall policy and change log; DNS/DHCP documentation; SSH and remote- administration guide; security baseline; troubleshooting guides; incident report; screenshots of firewall, VLANs, routing, DNS, DHCP, monitoring, and packet capture.
+
+Conclusion
+
+Project 9 establishes the networking and security foundation for the final enterprise capstone. The key professional outcome is not simply configuring VLANs or firewall rules; it is being able to reason from a user symptom to the correct network layer, enforce least privilege, protect administrative paths, and produce evidence-backed incident documentation.

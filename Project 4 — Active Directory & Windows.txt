@@ -1,0 +1,131 @@
+Project 4 — Active Directory & Windows
+
+Level: Intermediate → Advanced and Windows administration Focus: Active Directory, DNS, DHCP, Group Policy, users, groups, security
+
+Infostracture:
+
+System:
+
+· DC01
+
+· File01
+
+· Mon01
+
+· Backup01
+
+· Win-11
+
+Role:
+
+· Domain Controller
+
+· File Server
+
+· Monitoring
+
+· Backup Server
+
+· Windows-Client
+
+IP:
+
+192.168.56.104 192.168.56.105 192.168.56.118
+
+Executive Summary
+
+Project 4 builds a realistic Windows enterprise identity environment around Active Directory Domain Services (ADDS). The lab demonstrates centralized authentication, organizational structure, user and group management, DNS, DHCP, Group Policy, workstation domain joining, permissions, and basic administrative security.
+
+The intended lab domain is ad.acmelab.test. The environment should be isolated from production systems and use only test accounts and data.
+
+Lab Architecture
+
+Active Directory Design
+
+Create the forest/domain family.corp. Use organizational units (OUs) to separate users, computers, servers, and administrative objects. Departmental groups should be used to grant access rather than assigning permissions individually whenever practical.
+
+Recommended structure:
+
+Family
+
+· Users
+
+· IT
+
+· Cooking
+
+· Finance
+
+· VideoGames
+
+Identity & Access Management
+
+Create test users such as Alice, Bob, Charlie, David and Eve and place them into department groups. Create security groups such as IT-Admins, HR-Users, Finance-Users, Sales-Users and Engineering-Users. Apply least privilege: normal users should not be Domain Administrators. DNS AD-integrated DNS is essential to domain operation. Verify forward name resolution for DC01, FILE and other internal hosts. Test with nslookup or Resolve-DnsName from CLIENT01.
+
+DHCP
+
+Configure a client scope such as 192.168.56.0–192.168.56.200 with the correct gateway, DNS server and domain information. Validate the lease from Win-11 with ipconfig /all.
+
+Group Policy
+
+Implement a baseline policy for password requirements, automatic screen locking, Windows Firewall, administrative access and other safe lab controls. Avoid applying broad or destructive policies without testing them first.
+
+Domain Join
+
+Point File at DC01 for DNS, then join the computer to family.corp. Verify domain authentication and confirm that the intended Group Policy settings are applied.
+
+File Server Integration
+
+FILE should provide departmental shares. Use groups to control access. For example, HR-Users should receive access to the HR share while unrelated departments should not receive access by default.
+
+Security Baseline
+
+Use individual administrator accounts, strong authentication, least privilege, restricted remote administration, host firewalls, logging and monitoring. Test authentication, DNS, DHCP, Group Policy, file-share access and administrative controls.
+
+Suggested tests:
+
+• nslookup dc01.ad.acmelab.test • Resolve-DnsName file.family.corp • ipconfig /all • whoami • gpresult /r • Test-NetConnection file -Port 445
+
+Troubleshooting Workflow
+
+When a client cannot access a service, troubleshoot in layers: verify IP configuration → gateway → DNS → routing → firewall → listening port → service status → authentication → authorization. This prevents guessing and helps isolate the actual fault.
+
+Incident Exercise
+
+Scenario: a user can sign in to the domain but cannot access the HR file share. Confirm the user's group membership, resolve FILE01, test TCP/445, inspect share and NTFS permissions, and review relevant logs.
+
+Completion Checklist
+
+· DC01 deployed and promoted
+
+· AD domain created
+
+· OUs created
+
+· Users created
+
+· Security groups created
+
+· DNS verified
+
+· DHCP configured
+
+· Win-11 joined to domain
+
+· GPO baseline applied
+
+· FILE01 permissions tested
+
+· Monitoring integrated
+
+· Security baseline documented
+
+· Troubleshooting tests completed
+
+Deliverables
+
+The final Project 4 portfolio should include an architecture diagram, IP plan, OU/group design, user/group inventory, GPO documentation, DNS/DHCP configuration notes, security baseline, screenshots of successful tests, and at least one incident report.
+
+Final Assessment
+
+A successful Project 4 demonstrates that the administrator can deploy and manage a small Windows domain, centralize identity, control access through groups and policies, provide core network services, join clients, troubleshoot common failures, and document the environment professionally.

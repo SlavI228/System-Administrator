@@ -1,0 +1,125 @@
+PROJECT 8 - SysAdmin Automation & Configuration Management
+
+Level: Advanced
+
+Executive Summary
+
+Project 8 converts the AcmeLab lab from primarily manual administration into a repeatable, version-controlled automation environment. The project combines Bash, PowerShell, Ansible, YAML, SSH, Git, templates, roles, handlers, secrets management, monitoring, and backup automation.
+
+The target outcome is a fresh Linux server that can be brought to a standard managed state with minimal manual configuration.
+
+Project Objectives
+
+• Build an Ansible control node on MON01. • Create a structured infrastructure-as-code repository. • Automate Linux package, user, permission, Nginx, monitoring, and backup configuration. • Develop reusable Bash and PowerShell administration scripts. • Use Git for version control and change tracking. • Protect credentials and secrets from source control. • Demonstrate idempotent configuration management. • Provision a new Linux server using the same automation codebase.
+
+Lab Architecture
+
+MON01 acts as the Ansible control node. It manages Linux hosts such as FILE01 and can be extended to Windows hosts such as CLIENT01 and DC01 using appropriate Windows remote-management methods.
+
+System Role Automation
+
+MON01 Ansible control node / monitoring Ansible, Git
+
+FILE01 Linux file/application server SSH + Ansible
+
+DC01 Windows domain controller PowerShell / Windows management
+
+CLIENT01 Windows client PowerShell / Windows management
+
+Technology Stack
+
+Technology Purpose
+
+Bash Linux automation and health/maintenance scripts
+
+PowerShell Windows administration and reporting
+
+Ansible Configuration management and provisioning
+
+YAML Inventory and playbook definitions
+
+SSH Secure Linux remote administration
+
+Git Version control and change history
+
+Ansible Vault Protection of sensitive automation data
+
+Ansible Implementation
+
+The automation should be organized around desired state rather than imperative step-by-step changes. A standard Linux playbook can update package metadata, install approved packages, create users, configure directories, deploy services, and enable required systemd services.
+
+Example inventory:
+
+all: children: linux: hosts: FILE01: ansible_host: <FILE01-192.168.56.108> MON01: ansible_host: <MON01-192.168.56.108> windows: hosts: CLIENT01: ansible_host: <CLIENT01-192.168.56.105> DC01: ansible_host: <DC01-192.168.56.104>
+
+Idempotency
+
+A key success criterion is idempotency: running the same playbook repeatedly should converge the hosts toward the desired state without causing unnecessary changes. The second run should normally show mostly 'ok' results for resources already in the correct state.
+
+Linux Automation
+
+• Install common packages such as curl, wget, vim, htop, and Git. • Create controlled administrative accounts. • Manage ownership and permissions. • Install and enable Nginx. • Deploy configuration and web content from templates. • Install and configure monitoring agents. • Deploy backup scripts and schedules. • Apply a documented security baseline.
+
+Windows Automation
+
+• Build PowerShell health-check scripts. • Collect computer, OS, disk, memory, network, and service information. • Automate approved lab user-management tasks. • Generate health and inventory reports. • Use Windows remote-management capabilities for repeatable administration.
+
+Bash Automation
+
+Bash scripts should include clear variables, meaningful exit codes, logging, basic validation, and failure handling. Backup and maintenance scripts should report success only after the requested operation has actually succeeded.
+
+Monitoring & Backup Integration
+
+Project 8 extends Projects 6 and 7 by automating installation and configuration of monitoring agents and backup components. A new Linux host should be able to receive monitoring and backup configuration from the same automation repository.
+
+Git & Change Management
+
+The repository should use meaningful commits and feature branches. Example:
+
+git checkout -b feature/nginx-hardening
+
+git add .
+
+git commit -m "Harden Nginx configuration"
+
+A .gitignore file should exclude credentials, private keys, generated output, and other sensitive or unnecessary artifacts.
+
+Secrets Management
+
+Passwords, private keys, API tokens, and other secrets must never be committed as plaintext. For the lab, Ansible Vault is an appropriate learning mechanism. In a larger environment, centralized secret-management solutions can be considered.
+
+Testing & Validation
+
+Test Method Result
+
+Ansible connect Ansible linux -i inventory/hosts.yml -m ping Hosts respond successfully.
+
+Playbook syntax Ansible-playbook --syntax-check No syntax errors.
+
+Idempotency Run the same playbook twice Second run produces minimal changes.
+
+Service validation systemctl status nginx Required service is active.
+
+Network validation ss -tulpn / Test-NetConnection Expected ports are reachable/listening.
+
+Monitoring Check monitoring dashboard New host is visible and healthy.
+
+Backup Run backup and inspect logs Backup succeeds and can be restored.
+
+Final Provisioning Challenge
+
+Provision a fresh Linux VM named APP01. Add it to inventory and use the automation codebase to install packages, create the required administrative account, configure SSH and firewall settings, deploy Nginx, install monitoring, configure backup, and verify the final state. Success means APP01 is reproducibly configured from code rather than manually configured with a separate sequence of
+
+commands.
+
+Completion Checklist
+
+• Ansible installed and working on MON01 • Inventory created • Linux hosts reachable • Windows automation approach documented • Linux playbooks created • Reusable roles created • Variables and templates used • Handlers used where appropriate • Idempotency demonstrated • Bash health/backup/maintenance scripts created • PowerShell health/user/inventory scripts created • Monitoring automated • Backup automation integrated • Git repository initialized • Feature branch workflow demonstrated • Secrets protected • Fresh server provisioning completed • Documentation and screenshots collected
+
+Expected Deliverables
+
+The completed project should contain the automation repository, documentation, scripts, test evidence, screenshots, and a final provisioning demonstration.
+
+Professional Assessment
+
+Project 8 is complete when administration tasks are reproducible, changes are tracked, secrets are protected, and a fresh Linux server can be standardized through automation. The project demonstrates the transition from traditional manual SysAdmin work toward Infrastructure Engineering and configuration management.
